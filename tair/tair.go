@@ -5,7 +5,7 @@ import (
 )
 
 type Tair struct {
-    root Node
+    root *Node
     count int
 }
 
@@ -42,12 +42,12 @@ func (t *Tair) Del(values []byte) {
 
 type Node struct {
     value byte
-    nextNodes []Node
+    nextNodes []*Node
     nextNums int
 }
 
-func NewNode(value byte) Node {
-    return Node{
+func NewNode(value byte) *Node {
+    return &Node{
         value: value,
         nextNodes: nil,
         nextNums: 0}
@@ -60,7 +60,7 @@ func (t *Node) add(values []byte, place int) {
 
     if t.nextNodes == nil {
         log.Println("new nextNodes")
-        t.nextNodes = make([]Node, 0, 26)
+        t.nextNodes = make([]*Node, 0, 26)
         t.nextNums = 0
     }
 
