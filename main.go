@@ -12,5 +12,11 @@ func main() {
 
     fmt.Println(tair.Count())
 
+    tair.Add([]byte{'a'})
+
+    fmt.Println(tair.Count())
+
+    fmt.Println(tair.Find([]byte{'a'}))
+
     fmt.Println("==> end")
 }
