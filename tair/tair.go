@@ -1,7 +1,7 @@
 package tair
 
 import (
-    //"fmt"
+    "log"
 )
 
 type Tair struct {
@@ -59,13 +59,15 @@ func (t *Node) add(values []byte, place int) {
     }
 
     if t.nextNodes == nil {
-        t.nextNodes = make([]Node, 26, 26)
+        log.Println("new nextNodes")
+        t.nextNodes = make([]Node, 0, 26)
         t.nextNums = 0
     }
 
     if t.nextNums > 0 {
         for _, node := range t.nextNodes {
             if node.value == values[place] {
+                log.Println("duplicate byte:", string(node.value))
                 node.add(values, place + 1)
                 return
             }
@@ -74,6 +76,8 @@ func (t *Node) add(values []byte, place int) {
     node := NewNode(values[place])
     node.add(values, place + 1)
     t.nextNodes = append(t.nextNodes, node)
+    t.nextNums += 1
+    log.Println("add new Node:", string(node.value), t.nextNums)
 }
 
 func (t *Node) del(values []byte, place int) {
@@ -95,10 +99,12 @@ func (t *Node) del(values []byte, place int) {
 
 func (t *Node) find(values []byte, place int) bool {
     if t == nil || t.nextNums == 0 {
+        log.Println("can't cmp", string(values[place]), "nextNums:", string(t.value), t.nextNums)
         return false
     }
 
     for _, node := range t.nextNodes {
+        log.Println("cmp:", string(node.value), string(values[place]))
         if node.value == values[place] {
             if place == len(values) - 1 {
                 return true
