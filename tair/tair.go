@@ -41,20 +41,23 @@ func (t *Tair) Del(values []byte) {
 }
 
 type Node struct {
-    value byte
+    value     byte
     nextNodes []*Node
-    nextNums int
+    nextNums  int
+    flag      bool
 }
 
 func NewNode(value byte) *Node {
     return &Node{
         value: value,
         nextNodes: nil,
-        nextNums: 0}
+        nextNums: 0,
+        flag: false}
 }
 
 func (t *Node) add(values []byte, place int) {
     if place >= len(values) {
+        t.flag = true
         return
     }
 
@@ -107,7 +110,7 @@ func (t *Node) find(values []byte, place int) bool {
         log.Println("cmp:", string(node.value), string(values[place]))
         if node.value == values[place] {
             if place == len(values) - 1 {
-                return true
+                return node.flag
             }
             return node.find(values, place + 1)
         }
