@@ -1,23 +1,23 @@
-package tair
+package tire
 
 import (
     "log"
 )
 
-type Tair struct {
+type Tire struct {
     root *Node
     count int
 }
 
-func New() Tair {
-    return Tair{root: NewNode('0'), count: 0}
+func New() Tire {
+    return Tire{root: NewNode('0'), count: 0}
 }
 
-func (t *Tair) Count() int {
+func (t *Tire) Count() int {
     return t.count
 }
 
-func (t *Tair) Find(values []byte) bool {
+func (t *Tire) Find(values []byte) bool {
     if t.count == 0 {
         return false
     }
@@ -25,7 +25,7 @@ func (t *Tair) Find(values []byte) bool {
     return t.root.find(values, 0)
 }
 
-func (t *Tair) Add(values []byte) {
+func (t *Tire) Add(values []byte) {
     if t.Find(values) {
         return
     }
@@ -33,7 +33,7 @@ func (t *Tair) Add(values []byte) {
     t.count += 1
 }
 
-func (t *Tair) Del(values []byte) {
+func (t *Tire) Del(values []byte) {
     if t.Find(values) == true {
         t.root.del(values, 0)
         t.count -= 1
