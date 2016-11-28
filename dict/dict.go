@@ -39,3 +39,7 @@ func (d *Dict) Find(word string) int {
 
     return 0
 }
+
+func (d *Dict) Load(word string) {
+    
+}
