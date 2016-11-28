@@ -8,22 +8,22 @@ import (
 func main() {
     fmt.Println("==> start")
 
-    tair := tair.New()
+    tire := tire.New()
 
-    fmt.Println(tair.Count())
+    fmt.Println(tire.Count())
 
     //tire.Add([]byte{'b'})
     //tire.Add([]byte{'a', 'b'})
 
-    //fmt.Println(tair.Count())
+    //fmt.Println(tire.Count())
 
     //fmt.Println(tire.Find([]byte{'a'}))
     //fmt.Println(tire.Find([]byte{'b'}))
     //fmt.Println(tire.Find([]byte{'a', 'b'}))
 
-    tire.Add([]byte("测试"))
     tire.Add([]byte("测试1"))
     tire.Add([]byte("测试2"))
+    tire.Add([]byte("测试"))
 
     fmt.Println(tire.Count())
 
