@@ -21,9 +21,9 @@ func main() {
     //fmt.Println(tire.Find([]byte{'b'}))
     //fmt.Println(tire.Find([]byte{'a', 'b'}))
 
-    tire.Add([]byte("测试1"))
-    tire.Add([]byte("测试2"))
-    tire.Add([]byte("测试"))
+    tire.Add([]byte("测试1"), 1)
+    tire.Add([]byte("测试2"), 1)
+    tire.Add([]byte("测试"), 1)
 
     fmt.Println(tire.Count())
 

@@ -17,25 +17,25 @@ func (t *Tire) Count() int {
     return t.count
 }
 
-func (t *Tire) Find(values []byte) bool {
+func (t *Tire) Find(values []byte) *Node {
     if t.count == 0 {
-        return false
+        return nil
     }
 
-    return t.root.find(values, 0)
+    return t.root.Find(values, 0)
 }
 
-func (t *Tire) Add(values []byte) {
-    if t.Find(values) {
+func (t *Tire) Add(values []byte, freq int) {
+    if t.Find(values) != nil {
         return
     }
-    t.root.add(values, 0)
+    t.root.Add(values, 0, freq)
     t.count += 1
 }
 
 func (t *Tire) Del(values []byte) {
-    if t.Find(values) == true {
-        t.root.del(values, 0)
+    if t.Find(values) != nil {
+        t.root.Del(values, 0)
         t.count -= 1
     }
 }
@@ -44,7 +44,7 @@ type Node struct {
     value     byte
     nextNodes []*Node
     nextNums  int
-    flag      bool
+    freq      int
 }
 
 func NewNode(value byte) *Node {
@@ -52,12 +52,12 @@ func NewNode(value byte) *Node {
         value: value,
         nextNodes: nil,
         nextNums: 0,
-        flag: false}
+        freq: 0}
 }
 
-func (t *Node) add(values []byte, place int) {
+func (t *Node) Add(values []byte, place int, freq int) {
     if place >= len(values) {
-        t.flag = true
+        t.freq = freq
         return
     }
 
@@ -71,26 +71,26 @@ func (t *Node) add(values []byte, place int) {
         for _, node := range t.nextNodes {
             if node.value == values[place] {
                 log.Println("duplicate byte:", string(node.value))
-                node.add(values, place + 1)
+                node.Add(values, place + 1, freq)
                 return
             }
         }
     }
     node := NewNode(values[place])
-    node.add(values, place + 1)
+    node.Add(values, place + 1, freq)
     t.nextNodes = append(t.nextNodes, node)
     t.nextNums += 1
     log.Println("add new Node:", string(node.value), t.nextNums)
 }
 
-func (t *Node) del(values []byte, place int) {
+func (t *Node) Del(values []byte, place int) {
     if t.nextNums == 0 || place >= len(values) {
         return
     }
 
     for i, node := range t.nextNodes {
         if node.value == values[place] {
-            node.del(values, place + 1)
+            node.Del(values, place + 1)
             if node.nextNums <= 0 && place == len(values) - 1 {
                 t.nextNodes = append(t.nextNodes[:i], t.nextNodes[i+1:]...) // replace slice, use *list.List 
             }
@@ -100,21 +100,32 @@ func (t *Node) del(values []byte, place int) {
     }
 }
 
-func (t *Node) find(values []byte, place int) bool {
+func (t *Node) Find(values []byte, place int) *Node {
     if t == nil || t.nextNums == 0 {
         log.Println("can't cmp", string(values[place]), "nextNums:", string(t.value), t.nextNums)
-        return false
+        return nil
     }
 
     for _, node := range t.nextNodes {
         log.Println("cmp:", string(node.value), string(values[place]))
         if node.value == values[place] {
             if place == len(values) - 1 {
-                return node.flag
+                if node.freq > 0 {
+                    return node
+                }
+                return nil
             }
-            return node.find(values, place + 1)
+            return node.Find(values, place + 1)
         }
     }
 
-    return false
+    return nil
+}
+
+func (t *Node) AddFreq(freq int) {
+    t.freq += freq
+}
+
+func (t *Node) GetFreq() int {
+    return t.freq
 }
